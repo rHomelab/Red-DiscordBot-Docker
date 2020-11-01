@@ -1,0 +1,8 @@
+{
+    "AUTHOR" : "r/Homelab LabBot Team",
+    "INSTALL_MSG" : "These cogs are designed for r/Homelab, no warranty supplied or implied.",
+    "NAME" : "LabBot-Cogs",
+    "TAGS" : ["utility", "moderation"],
+    "SHORT" : "Cogs for LabBot",
+    "DESCRIPTION" : "Admin and Moderation cogs for reddit r/Homelab Discord"
+}
