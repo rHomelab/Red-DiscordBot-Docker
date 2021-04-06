@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+    labbot:
+        image: rhomelab/labbot:latest
+        container_name: LabBot
+        command: /bin/bash -c "redbot LabBot --team-members-are-owners"
+        volumes:
+            - /opt/LabBot/share:/home/redbot/.local/share
+            - /opt/LabBot/Red-DiscordBot:/usr/local/share/Red-DiscordBot
