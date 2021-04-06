@@ -4,8 +4,12 @@ ENV PATH="/home/redbot/.local:/home/redbot/.local/bin:${PATH}"
 
 RUN apt-get update && \
    apt-get --no-install-recommends -y install make wget curl python3-openssl git openjdk-11-jre && \
-   apt-get clean && \
-   groupadd -r redbot && useradd  -r -m -g redbot redbot && \
+   apt-get upgrade -y && \
+   apt-get autoremove -y && \
+   rm -rf /var/lib/apt/lists/* && \
+   python -m pip install --upgrade pip && \
+   groupadd -r redbot -g 1024 && \
+   useradd  -r -m -g redbot redbot && \
    mkdir -p /usr/local/share/Red-DiscordBot && \
    chown -R redbot:redbot /usr/local/share/Red-DiscordBot/ && \
    mkdir -p /home/redbot/.local/share && \
