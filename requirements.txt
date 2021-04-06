@@ -1,7 +1,7 @@
 pip
 wheel
 setuptools
-chardet==3.0.4
+chardet == 3.0.4
 croniter
 requests
-Red-DiscordBot
+Red-DiscordBot == 3.4.9
