@@ -3,6 +3,7 @@ services:
     labbot:
         image: rhomelab/labbot:latest
         container_name: LabBot
+        restart: always
         command: /bin/bash -c "redbot LabBot --team-members-are-owners"
         volumes:
             - /opt/LabBot/share:/home/redbot/.local/share
