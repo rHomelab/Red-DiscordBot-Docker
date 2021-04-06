@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  docker:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,18 +24,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Test set
+      - name: Get Red version
         run: echo "RED_VERSION=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed 's/Red-DiscordBot == //g')" >> $GITHUB_ENV
 
-      - name: Test echo
-        run: echo $RED_VERSION
+     - name: Build and push
+       id: docker_build
+       uses: docker/build-push-action@v2
+       with:
+         push: true
+        tags: rhomelab/labbot:${{ env.RED_VERSION }}
 
-#      - name: Build and push
-#        id: docker_build
-#        uses: docker/build-push-action@v2
-#        with:
-#          push: true
-#         tags: rhomelab/labbot:$VERSION
-
-#      - name: Image digest
-#        run: echo ${{ steps.docker_build.outputs.digest }}
+     - name: Image digest
+       run: echo ${{ steps.docker_build.outputs.digest }}
