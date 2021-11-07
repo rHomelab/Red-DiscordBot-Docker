@@ -1,4 +1,6 @@
-FROM python:3.8-buster
+FROM python:3.9-bullseye
+
+LABEL authors="tigattack,dantho281" 
 
 ENV PATH="/home/redbot/.local:/home/redbot/.local/bin:${PATH}"
 

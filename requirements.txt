@@ -4,4 +4,4 @@ setuptools
 chardet == 3.0.4
 croniter
 requests
-Red-DiscordBot == 3.4.12
+Red-DiscordBot == 3.4.14
