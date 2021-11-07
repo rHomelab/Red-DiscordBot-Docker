@@ -1,6 +1,5 @@
 pip
 wheel
 setuptools
-requests
 Red-DiscordBot == 3.4.14
 sentry_sdk
