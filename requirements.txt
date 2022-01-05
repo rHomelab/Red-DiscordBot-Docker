@@ -1,4 +1,4 @@
 pip
 wheel
 setuptools
-Red-DiscordBot == 3.4.14
+Red-DiscordBot == 3.4.16
