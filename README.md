@@ -3,10 +3,12 @@ r/Homelab's Red-DiscordBot instance.
 
 - [Red Docker Setup](#red-docker-setup)
 	- [Prerequisites](#prerequisites)
-    - [Configuring the Bot](#configuring-the-bot)
-    - [Running the Bot with `docker-compose`](#running-the-bot-with-docker-compose)
-    - [Running the Bot with `docker run`](#running-the-bot-with-docker-run)
-    - [Building the Bot Image Manually](#building-the-bot-image-manually)
+	- [How to run the Bot](#how-to-run-the-bot)
+		- [With `docker-compose`](#with-docker-compose)
+		- [With `docker run`](#with-docker-run)
+		- [Configuring the Bot](#configuring-the-bot)
+	- [Building the Bot Image Manually](#building-the-bot-image-manually)
+
 ## Red Docker Setup
 
 This repository contains the Dockerfile which can be used to build a Docker image of RedBot.
@@ -26,7 +28,22 @@ $ chmod -R g+s /opt/LabBot
 
 You can now reference the `rhomelab/labbot:dev` image instead of `rhomelab/labbot:latest` for all following instructions.
 
-### Configuring the Bot
+### How to run the Bot
+#### With `docker-compose`
+
+Note that `docker-compose.yml` has the `rhomelab/labbot:latest` image hardcoded, so you must change this if you wish to use a locally built or other image.
+```bash
+$ docker-compose pull
+$ docker-compose up -d
+```
+
+#### With `docker run`
+
+```bash
+docker run -it --detach --name 'LabBot' -v /opt/LabBot/share:/home/redbot/.local/share -v /opt/LabBot/Red-DiscordBot:/usr/local/share/Red-DiscordBot rhomelab/labbot:latest /bin/bash -c "redbot LabBot --team-members-are-owners"
+```
+
+#### Configuring the Bot
 
 This method will run the bot from a pre-built image. Alternatively, skip to the next step to build it yourself.
 
@@ -37,20 +54,6 @@ This method will run the bot from a pre-built image. Alternatively, skip to the 
 2. Run `redbot-setup` and follow the setup process to configure Red.
 3. Run `redbot LabBot` to set the name, then add your token and prefix.
 4. Once the bot has initialised, press Ctrl + C to exit the bot, then Ctrl + D to exit the container.
-
-### Running the Bot with `docker-compose`
-
-Note that `docker-compose.yml` has the `rhomelab/labbot:latest` image hardcoded, so you must change this if you wish to use a locally built or other image.
-```bash
-$ docker-compose pull
-$ docker-compose up -d
-```
-
-### Running the Bot with `docker run`
-
-```bash
-docker run -it --detach --name 'LabBot' -v /opt/LabBot/share:/home/redbot/.local/share -v /opt/LabBot/Red-DiscordBot:/usr/local/share/Red-DiscordBot rhomelab/labbot:latest /bin/bash -c "redbot LabBot --team-members-are-owners"
-```
 
 ### Building the Bot Image Manually
 
