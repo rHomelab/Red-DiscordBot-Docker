@@ -31,7 +31,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: rhomelab/Red-DiscordBot:latest,rhomelab/Red-DiscordBot:${{ env.RED_VERSION }}
+        tags: rhomelab/red-discordbot:latest,rhomelab/red-discordbot:${{ env.RED_VERSION }}
 
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
