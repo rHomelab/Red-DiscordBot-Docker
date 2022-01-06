@@ -26,12 +26,12 @@ if [ "$RPC_ENABLED" = 'true' ] && [ -z "$RPC_PORT" ]; then
     fi
 fi
 
-if [ -n "$EXTRA_ARGS" ]; then
-    ARGS="$ARGS $EXTRA_ARGS"
-fi
-
 if [ "$TEAM_MEMBERS_ARE_OWNERS" = 'true' ]; then
     ARGS="$ARGS --team-members-are-owners"
+fi
+
+if [ -n "$EXTRA_ARGS" ]; then
+    ARGS="$ARGS $EXTRA_ARGS"
 fi
 
 # Start Red
