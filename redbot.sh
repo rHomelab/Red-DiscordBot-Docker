@@ -10,7 +10,7 @@ if redbot --list-instances | grep -qe '^No instances have been configured!'; the
     {
         xargs redbot-setup <<< "$SETUP_ARGS" && \
         echo "Red instance '$INSTANCE_NAME' created successfully."
-        } || {
+    } || {
         echo "Failed to create Red instance '$INSTANCE_NAME'."
         exit 1
     }
