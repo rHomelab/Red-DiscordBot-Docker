@@ -4,6 +4,8 @@ LABEL authors="tigattack, dantho281"
 
 ENV PATH="/home/redbot/.local:/home/redbot/.local/bin:${PATH}"
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && \
    apt-get --no-install-recommends -y install build-essential git openjdk-11-jre-headless && \
    apt-get upgrade -y && \
