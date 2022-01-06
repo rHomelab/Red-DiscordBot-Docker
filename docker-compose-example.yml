@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+    red-bot:
+        image: rhomelab/Red-DiscordBot:latest
+        container_name: RedBot
+        restart: always
+        environment:
+            INSTANCE_NAME: "RedBot"
+            PREFIX: "^"
+            TOKEN: "yourBotToken"
+            # RPC_ENABLED: "true" # Optional, default false
+            # RPC_PORT: "CUSTOM_RPC_PORT" # Optional, default 6133
+            # TEAM_MEMBERS_ARE_OWNERS: "true" # Optional, default false
+            # EXTRA_ARGS: "--custom-arg" # Optional, default empty
+        volumes:
+            - /opt/RedBot:/redbot/data

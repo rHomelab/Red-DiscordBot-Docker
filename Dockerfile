@@ -1,24 +1,30 @@
 FROM python:3.9-bullseye
 
-LABEL authors="tigattack,dantho281" 
+LABEL authors="tigattack, dantho281"
 
 ENV PATH="/home/redbot/.local:/home/redbot/.local/bin:${PATH}"
 
 RUN apt-get update && \
-   apt-get --no-install-recommends -y install make wget curl python3-openssl git openjdk-11-jre && \
+   apt-get --no-install-recommends -y install build-essential git openjdk-11-jre-headless && \
    apt-get upgrade -y && \
    apt-get autoremove -y && \
-   rm -rf /var/lib/apt/lists/* && \
-   python -m pip install --upgrade pip && \
-   groupadd -r redbot -g 1024 && \
-   useradd  -r -m -g redbot redbot && \
-   mkdir -p /usr/local/share/Red-DiscordBot && \
-   chown -R redbot:redbot /usr/local/share/Red-DiscordBot/ && \
-   mkdir -p /home/redbot/.local/share && \
-   chown -R redbot:redbot /home/redbot/
+   rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -r redbot -g 1024 && \
+   useradd  -r -m -g redbot redbot
+
+COPY requirements.txt redbot.sh /redbot/
+
+RUN mkdir -pv /redbot/data /home/redbot/.local/share/ && \
+   ln -sv /redbot/data /usr/local/share/Red-DiscordBot && \
+   ln -sv /redbot/data /home/redbot/.local/share/Red-DiscordBot && \
+   chown -Rv redbot:redbot /redbot /home/redbot && \
+   chmod -v +x /redbot/redbot.sh
 
 USER redbot
 
-COPY requirements.txt /tmp/requirements.txt
+RUN python -m pip install --no-cache --upgrade --user -r /redbot/requirements.txt
 
-RUN python -m pip install --no-cache -U --user -r /tmp/requirements.txt
+VOLUME ["/redbot"]
+
+ENTRYPOINT ["/redbot/redbot.sh"]
