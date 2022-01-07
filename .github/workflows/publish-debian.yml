@@ -23,6 +23,13 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1 
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Get Red version
       run: echo "RED_VERSION=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed 's/Red-DiscordBot == //g')" >> $GITHUB_ENV
 
@@ -36,6 +43,8 @@ jobs:
         tags: |
           rhomelab/red-discordbot:latest
           rhomelab/red-discordbot:${{ env.RED_VERSION }}
+          ghcr.io/rhomelab/red-discordbot:latest
+          ghcr.io/rhomelab/red-discordbot:${{ env.RED_VERSION }}
 
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
