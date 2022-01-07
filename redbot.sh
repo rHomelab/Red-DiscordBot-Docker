@@ -1,14 +1,14 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 set -e
 
 # Check if a Red instance exists
+echo 'Checking for existing Red instances...'
+
 if redbot --list-instances | grep -qe '^No instances have been configured!'; then
     echo "No Red instance found. Creating instance '$INSTANCE_NAME'..."
-    
-    SETUP_ARGS="--instance-name $INSTANCE_NAME --no-prompt --data-path /redbot/data"
-    
+        
     {
-        xargs redbot-setup <<< "$SETUP_ARGS" && \
+        redbot-setup --instance-name "$INSTANCE_NAME" --no-prompt --data-path /redbot/data && \
         echo "Red instance '$INSTANCE_NAME' created successfully."
     } || {
         echo "Failed to create Red instance '$INSTANCE_NAME'."
@@ -16,7 +16,7 @@ if redbot --list-instances | grep -qe '^No instances have been configured!'; the
     }
 fi
 
-ARGS="$INSTANCE_NAME --token $TOKEN --prefix $PREFIX --no-prompt"
+ARGS="redbot $INSTANCE_NAME --token $TOKEN --prefix $PREFIX --no-prompt"
 
 if [ "$RPC_ENABLED" = 'true' ] && [ -z "$RPC_PORT" ]; then
     ARGS="$ARGS --rpc"
@@ -35,4 +35,5 @@ if [ -n "$EXTRA_ARGS" ]; then
 fi
 
 # Start Red
-exec xargs redbot <<< "${ARGS}"
+echo 'Starting Red...'
+exec sh -c "$ARGS"
