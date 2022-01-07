@@ -17,7 +17,7 @@ Note: This is an unsupported deployment method. Do not expect support from the d
 
 This image is built on both Debian and Alpine.
 
-The Alpine image is approximately half the size of the Debian image; this variant is useful when image size is a primary concern. The main caveat to note is that it does use musl libc instead of glibc and friends, so it's possible that some software may run into issues.  
+The Alpine image is approximately 60% smaller than the Debian image; this variant is useful when image size is a primary concern. The main caveat to note is that it does use musl libc instead of glibc and friends, so it's possible that some software may run into issues.  
 This image has functioned perfectly in basic testing, however, please raise an issue if you see any problems.
 
 |   **Tags**   |                                  **Red version**                                 |    **Base Image**   |
