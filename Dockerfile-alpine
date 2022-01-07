@@ -21,6 +21,6 @@ USER redbot
 
 RUN python -m pip install --no-cache-dir --upgrade --user -r /redbot/requirements.txt
 
-VOLUME ["/redbot"]
+VOLUME ["/redbot/data"]
 
 ENTRYPOINT ["/redbot/redbot.sh"]
