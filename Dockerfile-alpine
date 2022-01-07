@@ -4,9 +4,7 @@ LABEL author="tigattack"
 
 ENV PATH="/home/redbot/.local:/home/redbot/.local/bin:${PATH}"
 
-RUN apk -U upgrade && \
-   apk add --upgrade build-base git openjdk11-jre-headless libffi-dev && \
-   rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
+RUN apk add --no-cache build-base git openjdk11-jre-headless libffi-dev
 
 RUN addgroup -g 1024 -S redbot && \
    adduser -SG redbot redbot
