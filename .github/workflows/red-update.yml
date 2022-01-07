@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          token: ${{ secrets.GITHUB_REPO_TOKEN }}
+          token: ${{ secrets.REPO_SCOPED_TOKEN }}
 
       - name: Parse current Red version
         run: echo "RED_CURRENT=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed 's/Red-DiscordBot == //g')" >> $GITHUB_ENV
