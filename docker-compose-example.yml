@@ -1,7 +1,7 @@
 version: '3.8'
 services:
     red-bot:
-        image: rhomelab/Red-DiscordBot:latest
+        image: ghcr.io/rhomelab/red-discordbot:latest
         container_name: RedBot
         restart: always
         environment:
