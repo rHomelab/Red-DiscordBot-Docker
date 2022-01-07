@@ -1,4 +1,4 @@
-name: Publish Alpine Image
+name: Build & Publish Alpine Image
 
 on:
   push:

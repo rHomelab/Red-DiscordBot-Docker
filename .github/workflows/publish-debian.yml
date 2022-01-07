@@ -1,4 +1,4 @@
-name: Publish Debian Image
+name: Build & Publish Debian Image
 
 on:
   push:
