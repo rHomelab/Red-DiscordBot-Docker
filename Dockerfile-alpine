@@ -1,0 +1,28 @@
+FROM python:3.9-alpine
+
+LABEL author="tigattack"
+
+ENV PATH="/home/redbot/.local:/home/redbot/.local/bin:${PATH}"
+
+RUN apk -U upgrade && \
+   apk add --upgrade build-base git openjdk11-jre-headless libffi-dev && \
+   rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
+
+RUN addgroup -g 1024 -S redbot && \
+   adduser -SG redbot redbot
+
+COPY requirements.txt redbot.sh /redbot/
+
+RUN mkdir -pv /redbot/data /home/redbot/.local/share/ && \
+   ln -sv /redbot/data /usr/local/share/Red-DiscordBot && \
+   ln -sv /redbot/data /home/redbot/.local/share/Red-DiscordBot && \
+   chown -Rv redbot:redbot /redbot /home/redbot && \
+   chmod -v +x /redbot/redbot.sh
+
+USER redbot
+
+RUN python -m pip install --no-cache-dir --upgrade --user -r /redbot/requirements.txt
+
+VOLUME ["/redbot"]
+
+ENTRYPOINT ["/redbot/redbot.sh"]
