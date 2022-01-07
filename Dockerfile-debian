@@ -25,7 +25,7 @@ RUN mkdir -pv /redbot/data /home/redbot/.local/share/ && \
 
 USER redbot
 
-RUN python -m pip install --no-cache --upgrade --user -r /redbot/requirements.txt
+RUN python -m pip install --no-cache-dir --upgrade --user -r /redbot/requirements.txt
 
 VOLUME ["/redbot"]
 
