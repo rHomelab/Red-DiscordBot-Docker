@@ -8,7 +8,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
    apt-get --no-install-recommends -y install build-essential git openjdk-11-jre-headless && \
-   apt-get upgrade -y && \
    apt-get autoremove -y && \
    rm -rf /var/lib/apt/lists/*
 
