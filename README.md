@@ -12,6 +12,7 @@ Note: This is an unsupported deployment method. Do not expect support from the d
   * [Prerequisites](#prerequisites)
   * [Running the bot with `docker-compose`](#running-the-bot-with-docker-compose)
   * [Running the bot with `docker run`](#running-the-bot-with-docker-run)
+* [Migrating from `rhomelab:labbot`](#migrating-from-rhomelablabbot)
 
 ## Tags
 
@@ -70,4 +71,37 @@ Alpine-based image:
 
 ```bash
 docker run -d --name 'RedBot' -v /opt/RedBot:/redbot/data -e "INSTANCE_NAME=RedBot" -e "PREFIX=^" -e "TOKEN=yourBotToken" rhomelab/Red-DiscordBot:alpine
+```
+
+## Migrating from `rhomelab:labbot`
+
+The old `rhomelab:labbot` image used different mount paths for Red.
+
+Before using this image, you will need to move the following files:
+
+| **Old path**                                   | **New path**    |
+|------------------------------------------------|-----------------|
+| `./Red-DiscordBot/config.json`                 | `./config.json` |
+| `./share/Red-DiscordBot/data/your-instance-name>/` | `./`            |
+
+Example of layout in `rhomelab:labbot`:
+
+```plaintext
+Red-DiscordBot/
+├─ config.json
+share/
+├─ Red-DiscordBot/
+│  ├─ data/
+│  │  ├─ your-instance-name/
+│  │  │  ├─ cogs/
+│  │  │  ├─ core/
+
+```
+
+Example of new layout:
+
+```plaintext
+config.json
+cogs/
+core/
 ```
