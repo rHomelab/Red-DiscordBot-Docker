@@ -77,12 +77,17 @@ docker run -d --name 'RedBot' -v /opt/RedBot:/redbot/data -e "INSTANCE_NAME=RedB
 
 The old `rhomelab:labbot` image used different mount paths for Red.
 
-Before using this image, you will need to move the following files:
+Before using this image, you must make a few changes.
 
-| **Old path**                                   | **New path**    |
-|------------------------------------------------|-----------------|
-| `./Red-DiscordBot/config.json`                 | `./config.json` |
-| `./share/Red-DiscordBot/data/your-instance-name>/` | `./`            |
+1. Modify `./Red-DiscordBot/config.json`:  
+  The `DATA_PATH` value must be changed from `/home/redbot/.local/share/Red-DiscordBot/data/your-instance-name` to `/redbot/data`.
+2. Move the files and directories shown below.
+
+| **Old path**                                           | **New path**    |
+|--------------------------------------------------------|-----------------|
+| `./Red-DiscordBot/config.json`                         | `./config.json` |
+| `./share/Red-DiscordBot/data/your-instance-name>/cogs` | `./cogs`        |
+| `./share/Red-DiscordBot/data/your-instance-name>/core` | `./core`        |
 
 Example of layout in `rhomelab:labbot`:
 
