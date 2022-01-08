@@ -35,10 +35,15 @@ jobs:
             echo "::set-output name=update::true"
           fi
 
-      - name: Patch requirements.txt and commit changes
+      - name: Patch files referencing version
         if: steps.version-check.outputs.update == 'true'
         run: |
           sed -i -E "s/^(Red-DiscordBot ==).*$/\1 ${{ env.RED_LATEST }}/g" requirements.txt
+          sed -i -E "s/^(LABEL org\.opencontainers\.image\.version=\").*(\")$/\1${{ env.RED_LATEST }}\2/g" Dockerfile-*
+          
+      - name: Commit changes
+        if: steps.version-check.outputs.update == 'true'
+        run: |
           git config --global user.name 'CI'
           git config --global user.email '10629864+tigattack@users.noreply.github.com'
           git commit -am "feat(requirements): update Red-DiscordBot to ${{ env.RED_LATEST }}"
