@@ -79,6 +79,8 @@ jobs:
           rhomelab/red-discordbot:${{ needs.setup.outputs.red-version }}${{ matrix.extra_tag }}
           ghcr.io/rhomelab/red-discordbot:${{ matrix.tag }}
           ghcr.io/rhomelab/red-discordbot:${{ needs.setup.outputs.red-version }}${{ matrix.extra_tag }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
     - name: Image digest
       if: github.event_name != 'pull_request'
