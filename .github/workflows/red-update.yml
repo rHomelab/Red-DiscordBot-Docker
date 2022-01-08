@@ -41,5 +41,5 @@ jobs:
           sed -i -E "s/^(Red-DiscordBot ==).*$/\1 ${{ env.RED_LATEST }}/g" requirements.txt
           git config --global user.name 'CI'
           git config --global user.email '10629864+tigattack@users.noreply.github.com'
-          git commit -am "feat(requirements): update Red-DiscordBot to ${RED_LATEST}"
+          git commit -am "feat(requirements): update Red-DiscordBot to ${{ env.RED_LATEST }}"
           git push
