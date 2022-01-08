@@ -2,17 +2,7 @@ name: Build/Publish Image
 
 on:
   push:
-    paths:
-      - 'requirements.txt'
-      - 'Dockerfile-alpine'
-      - 'Dockerfile-debian'
-      - 'redbot.sh'
   pull_request:
-    paths:
-      - 'requirements.txt'
-      - 'Dockerfile-alpine'
-      - 'Dockerfile-debian'
-      - 'redbot.sh'
   workflow_dispatch:
     inputs:
       push:
