@@ -16,8 +16,20 @@ on:
   workflow_dispatch:
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      red-version: ${{ steps.red-version.outputs.version }}
+    steps:
+    - name: Get Red version
+      id: red-version
+      run: |
+        RED_VERSION=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed 's/Red-DiscordBot == //g')
+        echo "::set-output name=version::$RED_VERSION"
+
   build:
     name: Build ${{ matrix.base }} image
+    needs: [setup]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -49,9 +61,6 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Get Red version
-      run: echo "RED_VERSION=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed 's/Red-DiscordBot == //g')" >> $GITHUB_ENV
-
     - name: Build image
       if: github.event_name == 'pull_request'
       uses: docker/build-push-action@v2
@@ -74,9 +83,9 @@ jobs:
         push: true
         tags: |
           rhomelab/red-discordbot:${{ matrix.tag }}
-          rhomelab/red-discordbot:${{ env.RED_VERSION }}${{ matrix.extra_tag }}
+          rhomelab/red-discordbot:${{ needs.setup.outputs.red-version }}${{ matrix.extra_tag }}
           ghcr.io/rhomelab/red-discordbot:${{ matrix.tag }}
-          ghcr.io/rhomelab/red-discordbot:${{ env.RED_VERSION }}${{ matrix.extra_tag }}
+          ghcr.io/rhomelab/red-discordbot:${{ needs.setup.outputs.red-version }}${{ matrix.extra_tag }}
 
     - name: Image digest
       if: github.event_name == 'push'
