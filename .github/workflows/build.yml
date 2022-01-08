@@ -26,6 +26,7 @@ jobs:
     outputs:
       red-version: ${{ steps.red-version.outputs.version }}
     steps:
+    - uses: actions/checkout@v2
     - name: Get Red version
       id: red-version
       run: |
