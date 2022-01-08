@@ -1,6 +1,6 @@
 FROM python:3.9-alpine
 
-LABEL author="tigattack"
+LABEL org.opencontainers.image.authors="tigattack"
 
 ENV PATH="/home/redbot/.local:/home/redbot/.local/bin:${PATH}"
 
