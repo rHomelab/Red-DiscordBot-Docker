@@ -1,7 +1,7 @@
 # Red Discord Bot Docker
 
-![Docker Pulls](https://img.shields.io/docker/pulls/rhomelab/red-discordbot?logo=docker&style=for-the-badge)
-![Docker Image Version (latest semver)](https://img.shields.io/docker/v/rhomelab/red-discordbot?label=red%20version&logo=discord&style=for-the-badge)
+![Docker Hub Pulls](https://img.shields.io/docker/pulls/rhomelab/red-discordbot?logo=docker&label=docker%20hub%20pulls&style=for-the-badge)
+![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/rhomelab/red-discordbot/latest?label=red%20version&logo=discord&style=for-the-badge)
 
 [Red Discord Bot](https://discord.red), now containerised.
 
