@@ -1,6 +1,12 @@
 FROM python:3.9-alpine
 
 LABEL org.opencontainers.image.authors="tigattack"
+LABEL org.opencontainers.image.title="Red Discord Bot"
+LABEL org.opencontainers.image.description="Alpine-based Red Discord Bot container image."
+LABEL org.opencontainers.image.version="3.4.16"
+LABEL org.opencontainers.image.url="https://github.com/rHomelab/Red-DiscordBot-Docker"
+LABEL org.opencontainers.image.documentation="https://github.com/rHomelab/Red-DiscordBot-Docker/blob/main/README.md"
+LABEL org.opencontainers.image.source="https://github.com/rHomelab/Red-DiscordBot-Docker"
 
 ENV PATH="/home/redbot/.local:/home/redbot/.local/bin:${PATH}"
 
