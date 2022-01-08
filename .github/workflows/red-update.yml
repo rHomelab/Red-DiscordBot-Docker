@@ -1,4 +1,4 @@
-name: Check for Red releases
+name: Check/update Red-DiscordBot
 
 on:
   schedule:
@@ -14,32 +14,41 @@ jobs:
           token: ${{ secrets.REPO_SCOPED_TOKEN }}
 
       - name: Parse current Red version
-        run: echo "RED_CURRENT=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed 's/Red-DiscordBot == //g')" >> $GITHUB_ENV
+        id: red-current
+        run: |
+          RED_CURRENT=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed 's/Red-DiscordBot == //g')
+          echo "::set-output name=version::$RED_CURRENT"
 
       - name: Fetch latest Red release
+        id: red-latest
         run: |
           RED_LATEST=$(
             curl -sL https://api.github.com/repos/Cog-Creators/Red-DiscordBot/releases/latest | \
             jq -r ".tag_name"
           )
-          echo "RED_LATEST=$RED_LATEST" >> $GITHUB_ENV
+          echo "::set-output name=version::$RED_LATEST"
 
       - name: Compare current version to latest release tag
         id: version-check
         run: |
-          if [ "$(printf '%s\n' "${{ env.RED_LATEST }}" "${{ env.RED_CURRENT }}" | sort -V | head -n1)" = "${{ env.RED_LATEST }}" ]; then
-            echo "Current version (${{ env.RED_CURRENT }}) greater than or equal to latest release (${{ env.RED_LATEST }}). No action will be taken."
+          if [ "$(printf '%s\n' "${{ steps.red-latest.outputs.version }}" "${{ steps.red-current.outputs.version }}" | sort -V | head -n1)" = "${{ steps.red-latest.outputs.version }}" ]; then
+            echo "Current version (${{ steps.red-current.outputs.version }}) greater than or equal to latest release (${{ steps.red-latest.outputs.version }}). No action will be taken."
             echo "::set-output name=update::false"
           else
-            echo "Current version (${{ env.RED_CURRENT }}) less than latest release (${{ env.RED_LATEST }}). Update will be processed."
+            echo "Current version (${{ steps.red-current.outputs.version }}) less than latest release (${{ steps.red-latest.outputs.version }}). Update will be processed."
             echo "::set-output name=update::true"
           fi
 
-      - name: Patch requirements.txt and commit changes
+      - name: Patch files referencing version
         if: steps.version-check.outputs.update == 'true'
         run: |
-          sed -i -E "s/^(Red-DiscordBot ==).*$/\1 ${{ env.RED_LATEST }}/g" requirements.txt
+          sed -i -E "s/^(Red-DiscordBot ==).*$/\1 ${{ steps.red-latest.outputs.version }}/g" requirements.txt
+          sed -i -E "s/^(LABEL org\.opencontainers\.image\.version=\").*(\")$/\1${{ steps.red-latest.outputs.version }}\2/g" Dockerfile-*
+
+      - name: Commit changes
+        if: steps.version-check.outputs.update == 'true'
+        run: |
           git config --global user.name 'CI'
           git config --global user.email '10629864+tigattack@users.noreply.github.com'
-          git commit -am "feat(requirements): update Red-DiscordBot to ${{ env.RED_LATEST }}"
+          git commit -am "feat(requirements): update Red-DiscordBot to ${{ steps.red-latest.outputs.version }}"
           git push
