@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.REPO_SCOPED_TOKEN }}
 
       - name: Parse current Red version
         id: red-current
@@ -45,10 +43,30 @@ jobs:
           sed -i -E "s/^(Red-DiscordBot ==).*$/\1 ${{ steps.red-latest.outputs.version }}/g" requirements.txt
           sed -i -E "s/^(LABEL org\.opencontainers\.image\.version=\").*(\")$/\1${{ steps.red-latest.outputs.version }}\2/g" Dockerfile-*
 
-      - name: Commit changes
-        if: steps.version-check.outputs.update == 'true'
+      - name: Create Pull Request
+        id: create-pr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.REPO_SCOPED_TOKEN }}
+          commit-message: "feat(requirements): update Red-DiscordBot to ${{ steps.red-latest.outputs.version }}"
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          base: main
+          branch: feat/auto-red-update
+          delete-branch: true
+          title: "Red-DiscordBot ${{ steps.red-latest.outputs.version }}"
+          body: |
+            Update is available for Red-DiscordBot.
+            
+            Current version: ${{ steps.red-current.outputs.version }}
+            Latest version: ${{ steps.red-latest.outputs.version }}
+            
+            [${{ steps.red-latest.outputs.version }} release notes.](https://github.com/Cog-Creators/Red-DiscordBot/releases/tag/${{ steps.red-latest.outputs.version }})
+          reviewers: tigattack
+          labels: |
+            red-update
+            automated
+
+      - name: Pull request details
         run: |
-          git config --global user.name 'CI'
-          git config --global user.email '10629864+tigattack@users.noreply.github.com'
-          git commit -am "feat(requirements): update Red-DiscordBot to ${{ steps.red-latest.outputs.version }}"
-          git push
+          echo "${{ steps.create-pr.outputs.pull-request-operation }} PR #${{ steps.create-pr.outputs.pull-request-number }} - ${{ steps.create-pr.outputs.pull-request-url }}"
