@@ -48,7 +48,7 @@ Create the data directories and assign permissions. You can replace `/opt/RedBot
 ```bash
 mkdir -p /opt/RedBot
 chown -R :1024 /opt/RedBot
-chmod -R u=rwxg=rwx,a=rx,g+s /opt/RedBot
+chmod -R u=rwx,g=rwx,a=rx,g+s /opt/RedBot
 ```
 
 ### Running the bot with `docker-compose`
