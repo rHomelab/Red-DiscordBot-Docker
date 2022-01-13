@@ -66,13 +66,13 @@ Now run `docker-compose up -d` and see your bot come alive!
 Debian-based image:
 
 ```bash
-docker run -d --name 'RedBot' -v /opt/RedBot:/redbot/data -e "INSTANCE_NAME=RedBot" -e "PREFIX=^" -e "TOKEN=yourBotToken" rhomelab/Red-DiscordBot:latest
+docker run -d --name 'RedBot' -v /opt/RedBot:/redbot/data -e "INSTANCE_NAME=RedBot" -e "PREFIX=^" -e "TOKEN=yourBotToken" rhomelab/red-discordbot:latest
 ```
 
 Alpine-based image:
 
 ```bash
-docker run -d --name 'RedBot' -v /opt/RedBot:/redbot/data -e "INSTANCE_NAME=RedBot" -e "PREFIX=^" -e "TOKEN=yourBotToken" rhomelab/Red-DiscordBot:alpine
+docker run -d --name 'RedBot' -v /opt/RedBot:/redbot/data -e "INSTANCE_NAME=RedBot" -e "PREFIX=^" -e "TOKEN=yourBotToken" rhomelab/red-discordbot:alpine
 ```
 
 ## Migrating from `rhomelab:labbot`
