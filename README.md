@@ -46,10 +46,12 @@ To retrieve the invitation URL, run `docker logs RedBot`. If you only started th
 Create the data directories and assign permissions. You can replace `/opt/RedBot` with any path you wish.
 
 ```bash
-mkdir -p /opt/RedBot
-chown -R :1024 /opt/RedBot
-chmod -R u=rwx,g=rwx,a=rx,g+s /opt/RedBot
+sudo mkdir -p /opt/RedBot
+sudo chown -R :1024 /opt/RedBot
+sudo chmod -R 770 /opt/RedBot
 ```
+
+Note: You, and any other user with access to the host, will now need root access (or `sudo`) to read or write any of the contents of `/opt/RedBot`. If you wish to allow all users to read (but not write) the contents of the directory, run `sudo chmod -R 774 /opt/RedBot`.
 
 ### Running the bot with `docker-compose`
 
