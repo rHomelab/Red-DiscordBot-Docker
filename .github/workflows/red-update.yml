@@ -57,10 +57,10 @@ jobs:
           title: "Red-DiscordBot ${{ steps.red-latest.outputs.version }}"
           body: |
             Update is available for Red-DiscordBot.
-            
+
             Current version: ${{ steps.red-current.outputs.version }}
             Latest version: ${{ steps.red-latest.outputs.version }}
-            
+
             [${{ steps.red-latest.outputs.version }} release notes.](https://github.com/Cog-Creators/Red-DiscordBot/releases/tag/${{ steps.red-latest.outputs.version }})
           reviewers: tigattack
           labels: |
@@ -70,3 +70,19 @@ jobs:
       - name: Pull request details
         run: |
           echo "${{ steps.create-pr.outputs.pull-request-operation }} PR #${{ steps.create-pr.outputs.pull-request-number }} - ${{ steps.create-pr.outputs.pull-request-url }}"
+
+# Scheduled GitHub Actions workflows are disabled after 60 days of repository inactivity.
+# The steps below are a hacky workaround to eliminate that problem.
+
+      - name: checkout actions-keepalive branch
+        run: git checkout actions-keepalive
+
+      - name: Run keepalive
+        uses: gautamkrishnar/keepalive-workflow@v1
+        with:
+          commit_message: |
+            chore: Actions keepalive
+
+            Automated commit by Keepalive Workflow to keep repo and workflows active.
+          committer_username: github-actions
+          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
