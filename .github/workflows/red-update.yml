@@ -72,9 +72,12 @@ jobs:
 
 # Scheduled GitHub Actions workflows are disabled after 60 days of repository inactivity.
 # The steps below are a hacky workaround to eliminate that problem.
-
-      - name: checkout actions-keepalive branch
-        run: git checkout actions-keepalive
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: actions-keepalive
 
       - name: Run keepalive
         uses: gautamkrishnar/keepalive-workflow@v1
