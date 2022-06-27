@@ -47,10 +47,9 @@ jobs:
         id: create-pr
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.REPO_SCOPED_TOKEN }}
           commit-message: "feat(requirements): update Red-DiscordBot to ${{ steps.red-latest.outputs.version }}"
-          committer: GitHub <noreply@github.com>
-          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          committer: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+          author: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
           base: main
           branch: feat/auto-red-update
           delete-branch: true
