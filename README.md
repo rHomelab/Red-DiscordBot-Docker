@@ -33,13 +33,13 @@ This image has functioned perfectly in basic testing, however, please raise an i
 
 | Name                      | Description                                                                                                                                                            |
 |---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `INSTANCE_NAME`           | The name of your Red Bot instance.                                                                                                                                     |
-| `PREFIX`                  | Your bot's command prefix.                                                                                                                                             |
+| `INSTANCE_NAME`           | The name of your Red Bot instance.<br>Example: `MyBot`                                                                                                                                     |
+| `PREFIX`                  | Your bot's command prefix.<br>Example: `!`                                                                                                                                             |
 | `TOKEN`                   | Your bot token from Discord Developers.                                                                                                                                |
-| `RPC_ENABLED`             | Whether [RPC](https://docs.discord.red/en/stable/framework_rpc.html) is enabled or not. Options: `true` or `false` Default: `false`                                    |
-| `RPC_PORT`                | The port used by Red's RPC server, if enabled. Default: `6133`                                                                                                         |
-| `TEAM_MEMBERS_ARE_OWNERS` | Treat Discord Developers application team members as owners. Default: `6133`                                                                                           |
-| `EXTRA_ARGS`              | Any* extra arguments accepted by the `redbot` command. See full list [here](.github/redbot-arguments.txt). |
+| `RPC_ENABLED`             | Whether [RPC](https://docs.discord.red/en/stable/framework_rpc.html) is enabled or not.<br>Options: `true` or `false` <br>Default: `false`                                   |
+| `RPC_PORT`                | The port used by Red's RPC server, if enabled.<br>Default: `6133`                                                                                                       |
+| `TEAM_MEMBERS_ARE_OWNERS` | Treat Discord Developers application team members as owners.<br>Options: `true` or `false` <br>Default: `false`                                                                                         |
+| `EXTRA_ARGS`              | Any* extra arguments accepted by the `redbot` command. See full list [here](https://github.com/rHomelab/Red-DiscordBot-Docker/blob/main/.github/redbot-arguments.txt). |
 
 \* `EXTRA_ARGS` note: Do not add arguments which conflict with existing environment variables, such as `--prefix`, `--rpc`, etc.
 
