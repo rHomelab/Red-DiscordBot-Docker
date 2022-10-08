@@ -8,6 +8,7 @@
 Note: This is an unsupported deployment method. Do not expect support from the developers of Red Discord Bot if you run into any issues.
 
 * [Tags](#tags)
+* [Environment Variables](#environment-variables)
 * [Setup](#setup)
   * [Prerequisites](#prerequisites)
   * [Running the bot with `docker-compose`](#running-the-bot-with-docker-compose)
@@ -27,6 +28,20 @@ This image has functioned perfectly in basic testing, however, please raise an i
 | `alpine`     | [Latest release](https://github.com/Cog-Creators/Red-DiscordBot/releases/latest) | `python:3.9-alpine` |
 | x.x.x        | See tag                                                                          | `python:3.9-debian` |
 | x.x.x-alpine | See tag                                                                          | `python:3.9-alpine` |
+
+## Environment Variables
+
+| Name                      | Description                                                                                                                                                            |
+|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `INSTANCE_NAME`           | The name of your Red Bot instance.                                                                                                                                     |
+| `PREFIX`                  | Your bot's command prefix.                                                                                                                                             |
+| `TOKEN`                   | Your bot token from Discord Developers.                                                                                                                                |
+| `RPC_ENABLED`             | Whether [RPC](https://docs.discord.red/en/stable/framework_rpc.html) is enabled or not. Options: `true` or `false` Default: `false`                                    |
+| `RPC_PORT`                | The port used by Red's RPC server, if enabled. Default: `6133`                                                                                                         |
+| `TEAM_MEMBERS_ARE_OWNERS` | Treat Discord Developers application team members as owners. Default: `6133`                                                                                           |
+| `EXTRA_ARGS`              | Any* extra arguments accepted by the `redbot` command. See full list [here](.github/redbot-arguments.txt). |
+
+\* `EXTRA_ARGS` note: Do not add arguments which conflict with existing environment variables, such as `--prefix`, `--rpc`, etc.
 
 ## Setup
 
