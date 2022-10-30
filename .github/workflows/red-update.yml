@@ -15,7 +15,7 @@ jobs:
         id: red-current
         run: |
           RED_CURRENT=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed 's/Red-DiscordBot == //g')
-          echo "::set-output name=version::$RED_CURRENT"
+          echo "version=$RED_CURRENT" >> $GITHUB_OUTPUT
 
       - name: Fetch latest Red release
         id: red-latest
@@ -29,10 +29,10 @@ jobs:
         run: |
           if [ "$(printf '%s\n' "${{ steps.red-latest.outputs.tag }}" "${{ steps.red-current.outputs.version }}" | sort -V | head -n1)" = "${{ steps.red-latest.outputs.tag }}" ]; then
             echo "Current version (${{ steps.red-current.outputs.version }}) greater than or equal to latest release (${{ steps.red-latest.outputs.tag }}). No action will be taken."
-            echo "::set-output name=update::false"
+            echo "update=false" >> $GITHUB_OUTPUT
           else
             echo "Current version (${{ steps.red-current.outputs.version }}) less than latest release (${{ steps.red-latest.outputs.tag }}). Update will be processed."
-            echo "::set-output name=update::true"
+            echo "update=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Patch files referencing version
