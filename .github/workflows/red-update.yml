@@ -19,48 +19,46 @@ jobs:
 
       - name: Fetch latest Red release
         id: red-latest
-        run: |
-          RED_LATEST=$(
-            curl -sL https://api.github.com/repos/Cog-Creators/Red-DiscordBot/releases/latest | \
-            jq -r ".tag_name"
-          )
-          echo "::set-output name=version::$RED_LATEST"
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: Cog-Creators/Red-DiscordBot
+          releases-only: true
 
       - name: Compare current version to latest release tag
         id: version-check
         run: |
-          if [ "$(printf '%s\n' "${{ steps.red-latest.outputs.version }}" "${{ steps.red-current.outputs.version }}" | sort -V | head -n1)" = "${{ steps.red-latest.outputs.version }}" ]; then
-            echo "Current version (${{ steps.red-current.outputs.version }}) greater than or equal to latest release (${{ steps.red-latest.outputs.version }}). No action will be taken."
+          if [ "$(printf '%s\n' "${{ steps.red-latest.outputs.tag }}" "${{ steps.red-current.outputs.version }}" | sort -V | head -n1)" = "${{ steps.red-latest.outputs.tag }}" ]; then
+            echo "Current version (${{ steps.red-current.outputs.version }}) greater than or equal to latest release (${{ steps.red-latest.outputs.tag }}). No action will be taken."
             echo "::set-output name=update::false"
           else
-            echo "Current version (${{ steps.red-current.outputs.version }}) less than latest release (${{ steps.red-latest.outputs.version }}). Update will be processed."
+            echo "Current version (${{ steps.red-current.outputs.version }}) less than latest release (${{ steps.red-latest.outputs.tag }}). Update will be processed."
             echo "::set-output name=update::true"
           fi
 
       - name: Patch files referencing version
         if: steps.version-check.outputs.update == 'true'
         run: |
-          sed -i -E "s/^(Red-DiscordBot ==).*$/\1 ${{ steps.red-latest.outputs.version }}/g" requirements.txt
-          sed -i -E "s/^(LABEL org\.opencontainers\.image\.version=\").*(\")$/\1${{ steps.red-latest.outputs.version }}\2/g" Dockerfile-*
+          sed -i -E "s/^(Red-DiscordBot ==).*$/\1 ${{ steps.red-latest.outputs.tag }}/g" requirements.txt
+          sed -i -E "s/^(LABEL org\.opencontainers\.image\.version=\").*(\")$/\1${{ steps.red-latest.outputs.tag }}\2/g" Dockerfile-*
 
       - name: Create Pull Request
         id: create-pr
         uses: peter-evans/create-pull-request@v3
         with:
-          commit-message: "feat(requirements): update Red-DiscordBot to ${{ steps.red-latest.outputs.version }}"
+          commit-message: "feat(requirements): update Red-DiscordBot to ${{ steps.red-latest.outputs.tag }}"
           committer: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
           author: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
           base: main
           branch: feat/auto-red-update
           delete-branch: true
-          title: "Red-DiscordBot ${{ steps.red-latest.outputs.version }}"
+          title: "Red-DiscordBot ${{ steps.red-latest.outputs.tag }}"
           body: |
             Update is available for Red-DiscordBot.
 
             Current version: ${{ steps.red-current.outputs.version }}
-            Latest version: ${{ steps.red-latest.outputs.version }}
+            Latest version: ${{ steps.red-latest.outputs.tag }}
 
-            [${{ steps.red-latest.outputs.version }} release notes.](https://github.com/Cog-Creators/Red-DiscordBot/releases/tag/${{ steps.red-latest.outputs.version }})
+            [${{ steps.red-latest.outputs.tag }} release notes.](https://github.com/Cog-Creators/Red-DiscordBot/releases/tag/${{ steps.red-latest.outputs.tag }})
           reviewers: tigattack
           labels: |
             red-update
