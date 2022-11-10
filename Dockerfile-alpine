@@ -10,7 +10,7 @@ LABEL org.opencontainers.image.source="https://github.com/rHomelab/Red-DiscordBo
 
 ENV PATH="/home/redbot/.local:/home/redbot/.local/bin:${PATH}"
 
-RUN apk add --no-cache build-base git openjdk11-jre-headless libffi-dev
+RUN apk add --no-cache build-base git openjdk11-jre-headless libffi-dev units
 
 RUN addgroup -g 1024 -S redbot && \
    adduser -SG redbot redbot
