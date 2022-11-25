@@ -110,3 +110,4 @@ jobs:
       run: |
         docker load --input /tmp/${{ matrix.base }}.tar
         docker image push --all-tags rhomelab/red-discordbot
+        docker image push --all-tags ghcr.io/rhomelab/red-discordbot
