@@ -16,7 +16,7 @@ jobs:
     outputs:
       red-version: ${{ steps.red-version.outputs.version }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Get Red version
       id: red-version
       run: |
@@ -37,7 +37,7 @@ jobs:
             tag: alpine
             extra_tag: -alpine
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
