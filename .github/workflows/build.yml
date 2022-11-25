@@ -51,6 +51,8 @@ jobs:
         context: .
         file: Dockerfile-${{ matrix.base }}
         push: false
+        build-args: |
+          RED_VERSION=${{ needs.setup.outputs.red-version }}
         tags: |
           rhomelab/red-discordbot:${{ matrix.tag }}
           rhomelab/red-discordbot:${{ needs.setup.outputs.red-version }}${{ matrix.extra_tag }}
@@ -107,4 +109,4 @@ jobs:
     - name: Load and push image
       run: |
         docker load --input /tmp/${{ matrix.base }}.tar
-        docker image push --all-tags rhomelab/red-discordbot:${{ matrix.tag }}
+        docker image push --all-tags rhomelab/red-discordbot
