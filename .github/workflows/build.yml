@@ -23,7 +23,7 @@ jobs:
       id: red-version
       run: |
         RED_VERSION=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed 's/Red-DiscordBot == //g')
-        echo "::set-output name=version::$RED_VERSION"
+        echo "version=$RED_VERSION" >> $GITHUB_OUTPUT
 
   build:
     name: Build ${{ matrix.base }} image
