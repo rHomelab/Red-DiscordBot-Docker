@@ -6,7 +6,7 @@ echo 'Checking for existing Red instances...'
 
 if redbot --list-instances | grep -qe '^No instances have been configured!'; then
     echo "No Red instance found. Creating instance '$INSTANCE_NAME'..."
-        
+
     {
         redbot-setup --instance-name "$INSTANCE_NAME" --no-prompt --data-path /redbot/data && \
         echo "Red instance '$INSTANCE_NAME' created successfully."
@@ -16,11 +16,11 @@ if redbot --list-instances | grep -qe '^No instances have been configured!'; the
     }
 fi
 
-ARGS="redbot $INSTANCE_NAME --token $TOKEN --prefix $PREFIX --no-prompt"
+ARGS="$INSTANCE_NAME --token $TOKEN --prefix $PREFIX --no-prompt"
 
 if [ "$RPC_ENABLED" = 'true' ] && [ -z "$RPC_PORT" ]; then
     ARGS="$ARGS --rpc"
-    
+
     if [ -z "$RPC_PORT" ]; then
         ARGS="$ARGS --rpc-port 6133"
     fi
@@ -36,4 +36,4 @@ fi
 
 # Start Red
 echo 'Starting Red...'
-exec sh -c "$ARGS"
+redbot $ARGS
