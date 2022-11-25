@@ -61,7 +61,7 @@ jobs:
         outputs: type=docker,dest=/tmp/${{ matrix.base }}.tar
 
     - name: Upload image artefact
-      if: github.event_name == 'pull_request'
+      if: github.event_name != 'pull_request'
       uses: actions/upload-artifact@v3
       with:
         name: image-${{ matrix.base }}
