@@ -43,7 +43,7 @@ jobs:
 
       - name: Create Pull Request
         id: create-pr
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v4
         with:
           commit-message: "feat(requirements): update Red-DiscordBot to ${{ steps.red-latest.outputs.tag }}"
           committer: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
