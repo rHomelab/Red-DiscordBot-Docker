@@ -46,7 +46,7 @@ jobs:
 
     - name: Build image
       id: docker_build
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v4
       with:
         context: .
         file: Dockerfile-${{ matrix.base }}
