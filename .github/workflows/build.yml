@@ -51,6 +51,7 @@ jobs:
         context: .
         file: Dockerfile-${{ matrix.base }}
         push: false
+        platforms: linux/amd64,linux/arm64
         build-args: |
           RED_VERSION=${{ needs.setup.outputs.red-version }}
         tags: |
