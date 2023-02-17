@@ -61,7 +61,7 @@ jobs:
           ghcr.io/rhomelab/red-discordbot:${{ needs.setup.outputs.red-version }}${{ matrix.extra_tag }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
-        outputs: type=docker,dest=/tmp/${{ matrix.base }}.tar
+        outputs: type=oci,dest=/tmp/${{ matrix.base }}.tar
 
     - name: Upload image artefact
       if: github.event_name != 'pull_request'
