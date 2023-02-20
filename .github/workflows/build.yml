@@ -87,5 +87,5 @@ jobs:
         build-args: |
           RED_VERSION=${{ needs.setup.outputs.red_version }}
         tags: ${{ env.TAGS }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        cache-from: type=gha,scope=build-${{ matrix.base }}
+        cache-to: type=gha,mode=max,scope=build-${{ matrix.base }}
