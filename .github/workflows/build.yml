@@ -16,14 +16,23 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      red-version: ${{ steps.red-version.outputs.version }}
+      red_version: ${{ steps.tags.outputs.red_version }}
+      debian_tag: ${{ steps.tags.outputs.debian_tag }}
+      alpine_tag: ${{ steps.tags.outputs.alpine_tag }}
     steps:
     - uses: actions/checkout@v3
-    - name: Get Red version
-      id: red-version
+    - name: Get Red version and define tags
+      id: tags
       run: |
         RED_VERSION=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed 's/Red-DiscordBot == //g')
-        echo "version=$RED_VERSION" >> $GITHUB_OUTPUT
+        echo "red_version=$RED_VERSION" >> $GITHUB_OUTPUT
+        if [[ "${{ github.event_name }}" == 'push' || "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
+          echo "debian_tag=latest" >> $GITHUB_OUTPUT
+          echo "alpine_tag=alpine" >> $GITHUB_OUTPUT
+        else
+          echo "debian_tag=pr${{ github.event.number }}" >> $GITHUB_OUTPUT
+          echo "alpine_tag=alpine-pr${{ github.event.number }}" >> $GITHUB_OUTPUT
+        fi
 
   build:
     name: Build ${{ matrix.base }} image
@@ -33,57 +42,25 @@ jobs:
       matrix:
         include:
           - base: debian
-            tag: latest
+            tag: ${{ needs.setup.outputs.debian_tag }}
             extra_tag: ''
           - base: alpine
-            tag: alpine
+            tag: ${{ needs.setup.outputs.alpine_tag }}
             extra_tag: -alpine
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+    - name: Define tags
+      run: |
+        if [[ "${{ github.event_name }}" == 'push' || "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
+          echo "TAGS=rhomelab/red-discordbot:${{ matrix.tag }},\
+        ghcr.io/rhomelab/red-discordbot:${{ matrix.tag }},\
+        rhomelab/red-discordbot:${{ needs.setup.outputs.red_version }}${{ matrix.extra_tag }},\
+        ghcr.io/rhomelab/red-discordbot:${{ needs.setup.outputs.red_version }}${{ matrix.extra_tag }}" >> $GITHUB_ENV
+        elif [[ "${{ github.event_name }}" == 'pull_request' ]]; then
+          echo "TAGS=ghcr.io/rhomelab/red-discordbot:${{ matrix.tag }}" >> $GITHUB_ENV
+        fi
 
-    - name: Build image
-      id: docker_build
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: Dockerfile-${{ matrix.base }}
-        push: false
-        build-args: |
-          RED_VERSION=${{ needs.setup.outputs.red-version }}
-        tags: |
-          rhomelab/red-discordbot:${{ matrix.tag }}
-          rhomelab/red-discordbot:${{ needs.setup.outputs.red-version }}${{ matrix.extra_tag }}
-          ghcr.io/rhomelab/red-discordbot:${{ matrix.tag }}
-          ghcr.io/rhomelab/red-discordbot:${{ needs.setup.outputs.red-version }}${{ matrix.extra_tag }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-        outputs: type=docker,dest=/tmp/${{ matrix.base }}.tar
-
-    - name: Upload image artefact
-      if: github.event_name != 'pull_request'
-      uses: actions/upload-artifact@v3
-      with:
-        name: image-${{ matrix.base }}
-        path: /tmp/${{ matrix.base }}.tar
-
-  push:
-    name: Push ${{ matrix.base }} image
-    needs: [build]
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request' || github.event.inputs.push == 'true'
-    strategy:
-      matrix:
-        include:
-          - base: debian
-            tag: latest
-            extra_tag: ''
-          - base: alpine
-            tag: alpine
-            extra_tag: -alpine
-    steps:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
@@ -100,14 +77,16 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Download image artefact
-      uses: actions/download-artifact@v3
+    - name: Build and push image
+      uses: docker/build-push-action@v4
       with:
-        name: image-${{ matrix.base }}
-        path: /tmp/
-
-    - name: Load and push image
-      run: |
-        docker load --input /tmp/${{ matrix.base }}.tar
-        docker image push --all-tags rhomelab/red-discordbot
-        docker image push --all-tags ghcr.io/rhomelab/red-discordbot
+        context: .
+        file: Dockerfile-${{ matrix.base }}
+        push: ${{ github.event.inputs.push != 'false' }}
+        platforms: linux/amd64,linux/arm64
+        build-args: |
+          RED_VERSION=${{ needs.setup.outputs.red_version }}
+        tags: ${{ env.TAGS }}
+        cache-from: type=gha,scope=build-${{ matrix.base }}
+        cache-to: type=gha,mode=max,scope=build-${{ matrix.base }}
+        provenance: false
