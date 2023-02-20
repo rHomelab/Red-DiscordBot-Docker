@@ -1,0 +1,23 @@
+name: 'Cleanup PR images'
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  purge-image:
+    name: Delete ${{ matrix.tag }} image from ghcr.io
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - tag: pr${{ github.event.pull_request.number }}
+          - tag: alpine-pr${{ github.event.pull_request.number }}
+    steps:
+      - name: Delete image
+        uses: bots-house/ghcr-delete-image-action@v1.0.0
+        with:
+          owner: rhomelab
+          name: red-discordbot
+          token: ${{ secrets.IMAGE_CLEANUP_PAT }}
+          tag: ${{ matrix.tag }}
