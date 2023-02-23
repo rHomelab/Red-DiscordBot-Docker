@@ -15,7 +15,7 @@ jobs:
           - tag: alpine-pr${{ github.event.pull_request.number }}
     steps:
       - name: Delete image
-        uses: bots-house/ghcr-delete-image-action@v1.0.1
+        uses: bots-house/ghcr-delete-image-action@v1.1.0
         with:
           owner: rhomelab
           name: red-discordbot
