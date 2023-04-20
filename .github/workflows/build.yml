@@ -24,7 +24,7 @@ jobs:
     - name: Get Red version and define tags
       id: tags
       run: |
-        RED_VERSION=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed 's/Red-DiscordBot == //g')
+        RED_VERSION=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed -e 's/Red-DiscordBot\s\?==\s\?//g')
         echo "red_version=$RED_VERSION" >> $GITHUB_OUTPUT
         if [[ "${{ github.event_name }}" == 'push' || "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
           echo "debian_tag=latest" >> $GITHUB_OUTPUT
