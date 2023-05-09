@@ -1,4 +1,4 @@
-FROM python:3.11-bullseye
+FROM python:3.11-slim-bullseye
 
 ARG RED_VERSION
 
@@ -14,25 +14,23 @@ ENV PATH="/home/redbot/.local:/home/redbot/.local/bin:${PATH}"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && \
-   apt-get --no-install-recommends -y install build-essential git openjdk-11-jre-headless units && \
-   apt-get autoremove -y && \
-   rm -rf /var/lib/apt/lists/*
-
-RUN groupadd -r redbot -g 1024 && \
-   useradd  -r -m -g redbot redbot
-
 COPY requirements.txt redbot.sh /redbot/
 
-RUN mkdir -pv /redbot/data /home/redbot/.local/share/ && \
+RUN apt-get update && \
+   apt-get --no-install-recommends -y install build-essential git openjdk-11-jre-headless units && \
+   rm -rf /var/lib/apt/lists/* && \
+   groupadd -r redbot -g 1024 && \
+   useradd  -r -m -g redbot redbot && \
+   mkdir -pv /redbot/data /home/redbot/.local/share/ && \
    ln -sv /redbot/data /usr/local/share/Red-DiscordBot && \
    ln -sv /redbot/data /home/redbot/.local/share/Red-DiscordBot && \
    chown -Rv redbot:redbot /redbot /home/redbot && \
-   chmod -v +x /redbot/redbot.sh
+   chmod -v +x /redbot/redbot.sh && \
+   su - redbot -c "python -m pip install --no-cache-dir --upgrade --user -r /redbot/requirements.txt" && \
+   apt-get remove -y build-essential && \
+   apt-get autoremove -y
 
 USER redbot
-
-RUN python -m pip install --no-cache-dir --upgrade --user -r /redbot/requirements.txt
 
 VOLUME ["/redbot/data"]
 
