@@ -20,7 +20,7 @@ jobs:
       debian_tag: ${{ steps.tags.outputs.debian_tag }}
       alpine_tag: ${{ steps.tags.outputs.alpine_tag }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Get Red version and define tags
       id: tags
       run: |
@@ -48,7 +48,7 @@ jobs:
             tag: ${{ needs.setup.outputs.alpine_tag }}
             extra_tag: -alpine
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Define tags
       run: |
