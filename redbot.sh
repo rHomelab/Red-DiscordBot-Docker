@@ -1,6 +1,11 @@
 #!/usr/bin/env sh
 set -e
 
+# Install pip packages
+if [ -n "$PIP_REQUIREMENTS" ]; then
+    pip install -r "$PIP_REQUIREMENTS"
+fi
+
 # Check if a Red instance exists
 echo 'Checking for existing Red instances...'
 
