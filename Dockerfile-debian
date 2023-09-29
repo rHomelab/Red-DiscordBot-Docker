@@ -2,6 +2,8 @@ FROM python:3.11-slim-bullseye
 
 ARG RED_VERSION
 
+ENV PYTHONUNBUFFERED=1
+
 LABEL org.opencontainers.image.authors="tigattack, dantho281"
 LABEL org.opencontainers.image.title="Red Discord Bot"
 LABEL org.opencontainers.image.description="Debian-based Red Discord Bot container image."
