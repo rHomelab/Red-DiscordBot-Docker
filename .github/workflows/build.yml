@@ -8,9 +8,9 @@ on:
   workflow_dispatch:
     inputs:
       push:
-        description: 'Push image [true|false]'
+        description: "Push image [true|false]"
         required: false
-        default: 'false'
+        default: "false"
 
 jobs:
   setup:
@@ -20,19 +20,19 @@ jobs:
       debian_tag: ${{ steps.tags.outputs.debian_tag }}
       alpine_tag: ${{ steps.tags.outputs.alpine_tag }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Get Red version and define tags
-      id: tags
-      run: |
-        RED_VERSION=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed -e 's/Red-DiscordBot\s\?==\s\?//g')
-        echo "red_version=$RED_VERSION" >> $GITHUB_OUTPUT
-        if [[ "${{ github.event_name }}" == 'push' || "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
-          echo "debian_tag=latest" >> $GITHUB_OUTPUT
-          echo "alpine_tag=alpine" >> $GITHUB_OUTPUT
-        else
-          echo "debian_tag=pr${{ github.event.number }}" >> $GITHUB_OUTPUT
-          echo "alpine_tag=alpine-pr${{ github.event.number }}" >> $GITHUB_OUTPUT
-        fi
+      - uses: actions/checkout@v4
+      - name: Get Red version and define tags
+        id: tags
+        run: |
+          RED_VERSION=$(cat ./requirements.txt | grep 'Red-DiscordBot' | sed -e 's/Red-DiscordBot\s\?==\s\?//g')
+          echo "red_version=$RED_VERSION" >> $GITHUB_OUTPUT
+          if [[ "${{ github.event_name }}" == 'push' || "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
+            echo "debian_tag=latest" >> $GITHUB_OUTPUT
+            echo "alpine_tag=alpine" >> $GITHUB_OUTPUT
+          else
+            echo "debian_tag=pr${{ github.event.number }}" >> $GITHUB_OUTPUT
+            echo "alpine_tag=alpine-pr${{ github.event.number }}" >> $GITHUB_OUTPUT
+          fi
 
   build:
     name: Build ${{ matrix.base }} image
@@ -43,50 +43,50 @@ jobs:
         include:
           - base: debian
             tag: ${{ needs.setup.outputs.debian_tag }}
-            extra_tag: ''
+            extra_tag: ""
           - base: alpine
             tag: ${{ needs.setup.outputs.alpine_tag }}
             extra_tag: -alpine
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Define tags
-      run: |
-        if [[ "${{ github.event_name }}" == 'push' || "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
-          echo "TAGS=rhomelab/red-discordbot:${{ matrix.tag }},\
-        ghcr.io/rhomelab/red-discordbot:${{ matrix.tag }},\
-        rhomelab/red-discordbot:${{ needs.setup.outputs.red_version }}${{ matrix.extra_tag }},\
-        ghcr.io/rhomelab/red-discordbot:${{ needs.setup.outputs.red_version }}${{ matrix.extra_tag }}" >> $GITHUB_ENV
-        elif [[ "${{ github.event_name }}" == 'pull_request' ]]; then
-          echo "TAGS=ghcr.io/rhomelab/red-discordbot:${{ matrix.tag }}" >> $GITHUB_ENV
-        fi
+      - name: Define tags
+        run: |
+          if [[ "${{ github.event_name }}" == 'push' || "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
+            echo "TAGS=rhomelab/red-discordbot:${{ matrix.tag }},\
+          ghcr.io/rhomelab/red-discordbot:${{ matrix.tag }},\
+          rhomelab/red-discordbot:${{ needs.setup.outputs.red_version }}${{ matrix.extra_tag }},\
+          ghcr.io/rhomelab/red-discordbot:${{ needs.setup.outputs.red_version }}${{ matrix.extra_tag }}" >> $GITHUB_ENV
+          elif [[ "${{ github.event_name }}" == 'pull_request' ]]; then
+            echo "TAGS=ghcr.io/rhomelab/red-discordbot:${{ matrix.tag }}" >> $GITHUB_ENV
+          fi
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Login to DockerHub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and push image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        file: Dockerfile-${{ matrix.base }}
-        push: ${{ github.event.inputs.push != 'false' }}
-        platforms: linux/amd64,linux/arm64
-        build-args: |
-          RED_VERSION=${{ needs.setup.outputs.red_version }}
-        tags: ${{ env.TAGS }}
-        cache-from: type=gha,scope=build-${{ matrix.base }}
-        cache-to: type=gha,mode=max,scope=build-${{ matrix.base }}
-        provenance: false
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile-${{ matrix.base }}
+          push: ${{ github.event.inputs.push != 'false' }}
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            RED_VERSION=${{ needs.setup.outputs.red_version }}
+          tags: ${{ env.TAGS }}
+          cache-from: type=gha,scope=build-${{ matrix.base }}
+          cache-to: type=gha,mode=max,scope=build-${{ matrix.base }}
+          provenance: false
