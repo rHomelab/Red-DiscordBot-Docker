@@ -23,11 +23,13 @@ fi
 
 ARGS="$INSTANCE_NAME --token $TOKEN --prefix $PREFIX --no-prompt"
 
-if [ "$RPC_ENABLED" = 'true' ] && [ -z "$RPC_PORT" ]; then
+if [ "$RPC_ENABLED" = 'true' ]; then
     ARGS="$ARGS --rpc"
 
     if [ -z "$RPC_PORT" ]; then
         ARGS="$ARGS --rpc-port 6133"
+    else
+        ARGS="$ARGS --rpc-port $RPC_PORT"
     fi
 fi
 
