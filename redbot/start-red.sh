@@ -22,8 +22,10 @@ if [ "$TEAM_MEMBERS_ARE_OWNERS" = 'true' ]; then
     ARGS="$ARGS --team-members-are-owners"
 fi
 
-if [ -n "$EXTRA_ARGS" ]; then
-    ARGS="$ARGS $EXTRA_ARGS"
+# Append any arguments passed from cmdline
+[ -n "$EXTRA_ARGS" ] && echo "ERROR: EXTRA_ARGS is no longer supported. See https://github.com/rHomelab/Red-DiscordBot-Docker#additional-options" && exit 1
+if [ -n "$@" ]; then
+    ARGS="$ARGS $@"
 fi
 
 if [ -n "$PIP_REQUIREMENTS" ]; then

@@ -4,6 +4,7 @@ services:
         image: ghcr.io/rhomelab/red-discordbot:latest
         container_name: RedBot
         restart: always
+        # command: "" # Optional, default empty, e.g. --owner <OWNER>
         environment:
             INSTANCE_NAME: "RedBot"
             PREFIX: "^"
@@ -11,7 +12,6 @@ services:
             # RPC_ENABLED: "false"              # Optional, default false
             # RPC_PORT: "6133"                  # Optional, default 6133
             # TEAM_MEMBERS_ARE_OWNERS: "false"  # Optional, default false
-            # EXTRA_ARGS: ""                    # Optional, default empty, e.g. --owner <OWNER>
             # PIP_REQUIREMENTS: ""              # Optional, space-separated list of pip requirements, default empty
         volumes:
             - /opt/RedBot:/redbot/data

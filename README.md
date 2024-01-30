@@ -8,8 +8,12 @@
 > [!NOTE]  
 > This is an unsupported deployment method for Red. Do not expect support from the developers of Red Discord Bot if you run into any issues.
 
+> [!WARNING]  
+> BREAKING CHANGE: Additional `redbot` arguments passed via `EXTRA_ARGS` must now be passed as described in [Additional Options](#additional-options).
+
 * [Tags](#tags)
 * [Environment Variables](#environment-variables)
+  * [Additional Options](#additional-options)
 * [Setup](#setup)
   * [Prerequisites](#prerequisites)
   * [Running the bot with `docker compose`](#running-the-bot-with-docker-compose)
@@ -25,18 +29,25 @@
 
 ## Environment Variables
 
-| Name                      | Description                                                                                                                                                            |
-|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `INSTANCE_NAME`           | The name of your Red Bot instance.<br>Example: `MyBot`                                                                                                                 |
-| `PREFIX`                  | Your bot's command prefix.<br>Example: `!`                                                                                                                             |
-| `TOKEN`                   | Your bot token from Discord Developers.                                                                                                                                |
-| `RPC_ENABLED`             | Whether [RPC](https://docs.discord.red/en/stable/framework_rpc.html) is enabled or not.<br>Options: `true` or `false` <br>Default: `false`                             |
-| `RPC_PORT`                | The port used by Red's RPC server, if enabled.<br>Default: `6133`                                                                                                      |
-| `TEAM_MEMBERS_ARE_OWNERS` | Treat Discord Developers application team members as owners.<br>Options: `true` or `false` <br>Default: `false`                                                        |
-| `EXTRA_ARGS`              | Any* extra arguments accepted by the `redbot` command. See full list [here](https://github.com/rHomelab/Red-DiscordBot-Docker/blob/main/.github/redbot-arguments.txt). |
-| `PIP_REQUIREMENTS`        | Space-separated list of pip packages to install.                                                                                                                       |
+| Name                      | Description                                                                             | Type    | Default  |
+|---------------------------|-----------------------------------------------------------------------------------------|---------|----------|
+| `INSTANCE_NAME`           | The name of your Red Bot instance.<br>Example: `MyBot`                                  | string  | `RedBot` |
+| `PREFIX`                  | Your bot's command prefix.<br>Example: `!`                                              | string  |          |
+| `TOKEN`                   | Your bot token from Discord Developers.                                                 | string  |          |
+| `RPC_ENABLED`             | Whether [RPC](https://docs.discord.red/en/stable/framework_rpc.html) is enabled or not. | boolean | `false`  |
+| `RPC_PORT`                | The port used by Red's RPC server, if enabled.                                          | string  | `6133`   |
+| `TEAM_MEMBERS_ARE_OWNERS` | Treat Discord Developers application team members as owners.                            | boolean | `false`  |
+| `PIP_REQUIREMENTS`        | Optional space-separated list of pip packages to install.                               | string  |          |
 
-\* `EXTRA_ARGS` note: Do not add arguments which conflict with existing environment variables, such as `--prefix`, `--rpc`, etc.
+### Additional Options
+
+If you wish to pass additional options to the `redbot` command, these can be added to the `command` option in [`docker-compose.yml`](docker-compose-example.yml) or appended to the `docker run` command.
+
+> [!WARNING]
+> Do not add arguments which conflict with existing environment variables, such as `--prefix`, `--rpc`, etc.
+
+> [!TIP]
+> You can see a full list of `redbot` options [here](https://github.com/rHomelab/Red-DiscordBot-Docker/blob/main/.github/redbot-arguments.txt).
 
 ## Setup
 
@@ -66,6 +77,19 @@ docker run -d \
   -e "PREFIX=^" \
   -e "TOKEN=yourBotToken" \
   ghcr.io/rhomelab/red-discordbot:latest
+```
+
+With extra command arguments (see [Additional Options](#additional-options) above), for example to allow mentioning the bot as an alternative to using the bot prefix:
+
+```bash
+docker run -d \
+  --name 'RedBot' \
+  -v /opt/RedBot:/redbot/data \
+  -e "INSTANCE_NAME=RedBot" \
+  -e "PREFIX=^" \
+  -e "TOKEN=yourBotToken" \
+  ghcr.io/rhomelab/red-discordbot:latest \
+  --mentionable
 ```
 
 To retrieve the invitation URL, run `docker logs RedBot`. If you only started the container a few moments ago, you may need to wait a few seconds for the bot to be created, started, and connected.
