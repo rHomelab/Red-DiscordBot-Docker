@@ -6,6 +6,9 @@ if [ -z "$INSTANCE_NAME" ]; then
     INSTANCE_NAME="RedBot"
 fi
 
+[ -z "$TOKEN" ] && echo "ERROR: Missing TOKEN environment variable" && exit 1
+[ -z "$PREFIX" ] && echo "ERROR: Missing PREFIX environment variable" && exit 1
+
 ARGS="$INSTANCE_NAME --token $TOKEN --prefix $PREFIX --no-prompt"
 
 if [ "$RPC_ENABLED" = 'true' ]; then
