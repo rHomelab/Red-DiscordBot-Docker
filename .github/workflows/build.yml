@@ -8,58 +8,25 @@ on:
   workflow_dispatch:
     inputs:
       push:
-        description: "Push image [true|false]"
+        description: 'Push'
         required: false
-        default: "false"
+        type: boolean
+        default: true
+
+env:
+  IMAGE_NAME: red-discordbot
 
 jobs:
-  setup:
+  build:
     runs-on: ubuntu-latest
-    outputs:
-      red_version: ${{ steps.tags.outputs.red_version }}
-      debian_tag: ${{ steps.tags.outputs.debian_tag }}
-      alpine_tag: ${{ steps.tags.outputs.alpine_tag }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Get Red version and define tags
-        id: tags
+        id: build_info
         run: |
           RED_VERSION=$(cat ./redbot/requirements.txt | grep 'Red-DiscordBot' | sed -e 's/Red-DiscordBot\s\?==\s\?//g')
           echo "red_version=$RED_VERSION" >> $GITHUB_OUTPUT
-          if [[ "${{ github.event_name }}" == 'push' || "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
-            echo "debian_tag=latest" >> $GITHUB_OUTPUT
-            echo "alpine_tag=alpine" >> $GITHUB_OUTPUT
-          else
-            echo "debian_tag=pr${{ github.event.number }}" >> $GITHUB_OUTPUT
-            echo "alpine_tag=alpine-pr${{ github.event.number }}" >> $GITHUB_OUTPUT
-          fi
-
-  build:
-    name: Build ${{ matrix.base }} image
-    needs: [setup]
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - base: debian
-            tag: ${{ needs.setup.outputs.debian_tag }}
-            extra_tag: ""
-          - base: alpine
-            tag: ${{ needs.setup.outputs.alpine_tag }}
-            extra_tag: -alpine
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Define tags
-        run: |
-          if [[ "${{ github.event_name }}" == 'push' || "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
-            echo "TAGS=rhomelab/red-discordbot:${{ matrix.tag }},\
-          ghcr.io/rhomelab/red-discordbot:${{ matrix.tag }},\
-          rhomelab/red-discordbot:${{ needs.setup.outputs.red_version }}${{ matrix.extra_tag }},\
-          ghcr.io/rhomelab/red-discordbot:${{ needs.setup.outputs.red_version }}${{ matrix.extra_tag }}" >> $GITHUB_ENV
-          elif [[ "${{ github.event_name }}" == 'pull_request' ]]; then
-            echo "TAGS=ghcr.io/rhomelab/red-discordbot:${{ matrix.tag }}" >> $GITHUB_ENV
-          fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -77,16 +44,35 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Gather Docker metadata
+        uses: docker/metadata-action@v5
+        id: meta
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+        with:
+          images: |
+            ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
+            ${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
+          tags: |
+              type=raw,value=latest,enable={{is_default_branch}}
+              type=semver,pattern={{version}},value=${{ steps.build_info.outputs.red_version }},enable={{is_default_branch}}
+              type=semver,pattern={{major}}.{{minor}},value=${{ steps.build_info.outputs.red_version }},enable={{is_default_branch}}
+              type=semver,pattern={{major}},value=${{ steps.build_info.outputs.red_version }},enable={{is_default_branch}}
+              type=ref,event=pr
+
       - name: Build and push image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: Dockerfile-${{ matrix.base }}
-          push: ${{ github.event.inputs.push != 'false' }}
+          push: ${{ inputs.push != 'false' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
           platforms: linux/amd64,linux/arm64
-          build-args: |
-            RED_VERSION=${{ needs.setup.outputs.red_version }}
-          tags: ${{ env.TAGS }}
-          cache-from: type=gha,scope=build-${{ matrix.base }}
-          cache-to: type=gha,mode=max,scope=build-${{ matrix.base }}
+          # Build cache is scoped to branches by default.
+          # We use the main branch as a fallback if there's no cache for the existing branch.
+          # https://stackoverflow.com/a/77127188/5209106
+          cache-from: |
+            type=gha
+            type=gha,scope=main
+          cache-to: type=gha,mode=max
           provenance: false
