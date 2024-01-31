@@ -59,7 +59,7 @@ After running the steps below, your Red Discord Bot will be alive!
 
 Create a `docker-compose.yml` file based on the [example](docker-compose-example.yml) and configure the environment variables to suit your desired configuration.
 
-Be sure to update the `/opt/RedBot` path if you wish your bot's persistent data to be stored elsewhere.
+Be sure to update the `/opt/redbot` path if you wish your bot's persistent data to be stored elsewhere.
 
 Now run `docker compose up -d` and see your bot come alive!
 
@@ -72,7 +72,7 @@ Basic setup:
 ```bash
 docker run -d \
   --name 'RedBot' \
-  -v /opt/RedBot:/redbot/data \
+  -v /opt/redbot:/redbot/data \
   -e "INSTANCE_NAME=RedBot" \
   -e "PREFIX=^" \
   -e "TOKEN=yourBotToken" \
@@ -84,7 +84,7 @@ With extra command arguments (see [Additional Options](#additional-options) abov
 ```bash
 docker run -d \
   --name 'RedBot' \
-  -v /opt/RedBot:/redbot/data \
+  -v /opt/redbot:/redbot/data \
   -e "INSTANCE_NAME=RedBot" \
   -e "PREFIX=^" \
   -e "TOKEN=yourBotToken" \

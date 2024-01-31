@@ -14,4 +14,4 @@ services:
             # TEAM_MEMBERS_ARE_OWNERS: "false"  # Optional, default false
             # PIP_REQUIREMENTS: ""              # Optional, space-separated list of pip requirements, default empty
         volumes:
-            - /opt/RedBot:/redbot/data
+            - /opt/redbot:/redbot/data
