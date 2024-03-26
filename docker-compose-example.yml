@@ -13,5 +13,6 @@ services:
             # RPC_PORT: "6133"                  # Optional, default 6133
             # TEAM_MEMBERS_ARE_OWNERS: "false"  # Optional, default false
             # PIP_REQUIREMENTS: ""              # Optional, space-separated list of pip requirements, default empty
+            # LOAD_COGS: ""                     # Optional, space-separated list of exclusive cogs to load, default empty
         volumes:
             - /opt/redbot:/redbot/data

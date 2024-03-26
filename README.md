@@ -38,6 +38,7 @@
 | `RPC_PORT`                | The port used by Red's RPC server, if enabled.                                          | string  | `6133`   |
 | `TEAM_MEMBERS_ARE_OWNERS` | Treat Discord Developers application team members as owners.                            | boolean | `false`  |
 | `PIP_REQUIREMENTS`        | Optional space-separated list of pip packages to install.                               | string  |          |
+| `LOAD_COGS`               | Optional space-separated list of cogs to load on startup.                               | string  |          |
 
 ### Additional Options
 
