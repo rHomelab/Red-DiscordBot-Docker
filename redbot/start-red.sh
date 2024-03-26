@@ -25,6 +25,11 @@ if [ "$TEAM_MEMBERS_ARE_OWNERS" = 'true' ]; then
     ARGS="$ARGS --team-members-are-owners"
 fi
 
+# Only load the listed cogs when specified.
+if [ -n "$LOAD_COGS" ]; then
+    ARGS="$ARGS --no-cogs --load-cogs $LOAD_COGS"
+fi
+
 # Append any arguments passed from cmdline
 [ -n "$EXTRA_ARGS" ] && echo "ERROR: EXTRA_ARGS is no longer supported. See https://github.com/rHomelab/Red-DiscordBot-Docker#additional-options" && exit 1
 if [ -n "$@" ]; then
