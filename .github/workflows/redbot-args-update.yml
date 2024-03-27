@@ -26,6 +26,7 @@ jobs:
 
       - name: Update redbot-arguments.txt
         run: |
+          : > .github/redbot-arguments.txt
           redbot --version >> .github/redbot-arguments.txt
           echo >> .github/redbot-arguments.txt
           redbot --help >> .github/redbot-arguments.txt
