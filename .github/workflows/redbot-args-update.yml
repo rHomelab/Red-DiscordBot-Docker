@@ -22,8 +22,7 @@ jobs:
           python-version: ${{ steps.build_info.outputs.python_version }}
 
       - name: Install dependencies
-        run: |
-          pip install -r redbot/requirements.txt
+        run: pip install -r redbot/requirements.txt
 
       - name: Update redbot-arguments.txt
         run: |
