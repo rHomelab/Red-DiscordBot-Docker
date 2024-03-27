@@ -1,0 +1,39 @@
+name: Update redbot-arguments.txt
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get Python version
+        id: build_info
+        run: 
+          pyver=$(cat Dockerfile | grep FROM | grep -oP '(\d(\.\d\d?)?)')
+          echo "python_version=$pyverr" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ steps.build_info.outputs.python_version }}
+
+      - name: Install dependencies
+        run: pip install -r redbot/requirements.txt
+
+      - name: Update redbot-arguments.txt
+        run: |
+          redbot --version >> .github/redbot-arguments.txt
+          echo >> .github/redbot-arguments.txt
+          redbot --help >> .github/redbot-arguments.txt
+
+          if git status | grep -q 'branch is up to date' ; then
+            git add .github/redbot-arguments.txt
+            git commit -m "Update redbot-arguments.txt"
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git push
+          fi
