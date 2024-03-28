@@ -27,9 +27,7 @@ fi
 
 # Append any arguments passed from cmdline
 [ -n "$EXTRA_ARGS" ] && echo "ERROR: EXTRA_ARGS is no longer supported. See https://github.com/rHomelab/Red-DiscordBot-Docker#additional-options" && exit 1
-if [ -n "$@" ]; then
-    ARGS="$ARGS $@"
-fi
+ARGS="$ARGS $@"
 
 if [ -n "$PIP_REQUIREMENTS" ]; then
     echo "Installing pip packages: $PIP_REQUIREMENTS"
