@@ -35,8 +35,12 @@ jobs:
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
             git add "$ARGS_FILE"
-            git commit -m "Update redbot-arguments.txt"
+            git commit -m "Update ${ARGS_FILE##*/}"
             git push
+            
+            echo "${ARGS_FILE##*/} has been updated." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "${ARGS_FILE##*/} did not need to be updated." >> $GITHUB_STEP_SUMMARY
           fi
         env:
           ARGS_FILE: .github/redbot-arguments.txt
