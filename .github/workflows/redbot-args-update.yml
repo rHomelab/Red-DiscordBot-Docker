@@ -26,15 +26,17 @@ jobs:
 
       - name: Update redbot-arguments.txt
         run: |
-          : > .github/redbot-arguments.txt
-          redbot --version >> .github/redbot-arguments.txt
-          echo >> .github/redbot-arguments.txt
-          redbot --help >> .github/redbot-arguments.txt
+          : > "$ARGS_FILE"
+          redbot --version >> "$ARGS_FILE"
+          echo >> "$ARGS_FILE"
+          redbot --help >> "$ARGS_FILE"
 
           if git status | grep -q 'Changes not staged for commit' ; then
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
-            git add .github/redbot-arguments.txt
+            git add "$ARGS_FILE"
             git commit -m "Update redbot-arguments.txt"
             git push
           fi
+        env:
+          ARGS_FILE: .github/redbot-arguments.txt
