@@ -1,5 +1,5 @@
 Red V3
-Current Version: 3.5.8
+Current Version: 3.5.9
 
 usage: redbot <instance_name> [arguments]
 
