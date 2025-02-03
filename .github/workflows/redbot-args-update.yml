@@ -15,6 +15,7 @@ jobs:
         id: build_info
         run: 
           pyver=$(cat Dockerfile | grep FROM | grep -oP '(\d(\.\d\d?)?)')
+          echo "$pyver"
           echo "python_version=$pyver" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-python@v5
