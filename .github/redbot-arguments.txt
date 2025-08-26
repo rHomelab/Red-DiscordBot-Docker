@@ -1,5 +1,5 @@
 Red V3
-Current Version: 3.5.20
+Current Version: 3.5.21
 
 usage: redbot <instance_name> [arguments]
 
@@ -81,13 +81,17 @@ options:
                         intent. Currently NOT SUPPORTED (and not covered by
                         our version guarantees) as Red is not prepared to work
                         without all intents. Go to https://discordpy.readthedo
-                        cs.io/en/v2.5.2/api.html#discord.Intents to see what
+                        cs.io/en/v2.6.2/api.html#discord.Intents to see what
                         each intent does. This flag can be used multiple times
                         to specify multiple intents.
   --force-rich-logging  Forcefully enables the Rich logging handlers. This is
                         normally enabled for supported active terminals.
   --force-disable-rich-logging
                         Forcefully disables the Rich logging handlers.
+  --rich-tracebacks     Format the Python exception tracebacks using Rich
+                        (with syntax highlighting). *May* be useful to
+                        increase traceback readability during development.
+  --no-rich-tracebacks
   --rich-traceback-extra-lines RICH_TRACEBACK_EXTRA_LINES
                         Set the number of additional lines of code before and
                         after the executed line that should be shown in
