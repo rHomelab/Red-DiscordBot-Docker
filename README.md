@@ -8,9 +8,6 @@
 > [!NOTE]  
 > This is an unsupported deployment method for Red. Do not expect support from the developers of Red Discord Bot if you run into any issues.
 
-> [!WARNING]  
-> BREAKING CHANGE: Additional `redbot` arguments passed via `EXTRA_ARGS` must now be passed as described in [Additional Options](#additional-options).
-
 * [Tags](#tags)
 * [Environment Variables](#environment-variables)
   * [Additional Options](#additional-options)
