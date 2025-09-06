@@ -18,7 +18,7 @@ jobs:
           echo "$pyver"
           echo "python_version=$pyver" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ steps.build_info.outputs.python_version }}
 
