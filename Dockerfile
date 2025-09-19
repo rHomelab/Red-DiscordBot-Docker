@@ -20,7 +20,7 @@ RUN groupadd -r -g $RED_GID ${RED_USER} && \
 COPY redbot/requirements.txt ${RED_HOME}/
 
 RUN apt update && \
-   apt --no-install-recommends -y install build-essential git openjdk-11-jre-headless units && \
+   apt --no-install-recommends -y install build-essential git openjdk-11-jre-headless units tini && \
    su $RED_USER -c "python -m pip install --no-cache-dir --user -r ${RED_HOME}/requirements.txt" && \
    apt remove -y build-essential && \
    apt autoremove -y && \
@@ -30,4 +30,4 @@ COPY --chmod=755 redbot/*.sh ${RED_HOME}/
 
 VOLUME ["${RED_HOME}/data"]
 
-ENTRYPOINT ["/redbot/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/redbot/entrypoint.sh"]
