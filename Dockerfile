@@ -25,7 +25,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
    --mount=type=cache,target=${RED_HOME}/.cache/pip,sharing=locked \
    --mount=type=bind,source=redbot/requirements.txt,target=${RED_HOME}/requirements.txt \
    apt update && \
-   apt --no-install-recommends -y install build-essential git openjdk-11-jre-headless units tini && \
+   apt --no-install-recommends -y install build-essential git openjdk-21-jre-headless units tini && \
    su $RED_USER -c "python -m pip install --user -r ${RED_HOME}/requirements.txt" && \
    apt remove -y build-essential && \
    apt autoremove -y
