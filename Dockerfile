@@ -2,7 +2,8 @@ FROM python:3.11-slim-trixie
 
 ARG DEBIAN_FRONTEND=noninteractive \
    RED_UID=1024 \
-   RED_GID=1024
+   RED_GID=1024 \
+   SKIP_JRE
 
 ENV PYTHONUNBUFFERED=1 \
    PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -25,7 +26,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
    --mount=type=cache,target=${RED_HOME}/.cache/pip,sharing=locked \
    --mount=type=bind,source=redbot/requirements.txt,target=${RED_HOME}/requirements.txt \
    apt update && \
-   apt --no-install-recommends -y install build-essential git openjdk-21-jre-headless units tini && \
+   apt --no-install-recommends -y install build-essential git units tini && \
+   if [ -z "$SKIP_JRE" ]; then apt --no-install-recommends -y install openjdk-21-jre-headless; fi && \
    su $RED_USER -c "python -m pip install --user -r ${RED_HOME}/requirements.txt" && \
    apt remove -y build-essential && \
    apt autoremove -y
