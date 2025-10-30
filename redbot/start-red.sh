@@ -51,4 +51,4 @@ else
     echo "Found Red instance '$INSTANCE_NAME'. Starting..."
 fi
 
-redbot $ARGS
+exec redbot $ARGS
