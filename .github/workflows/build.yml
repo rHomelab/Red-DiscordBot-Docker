@@ -18,7 +18,17 @@ env:
 
 jobs:
   build:
+    name: Build ${{ matrix.variant.name }} variant
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        variant:
+          - name: "default"
+            build_args: ""
+            tag_suffix: ""
+          - name: "noaudio"
+            build_args: "SKIP_JRE=1"
+            tag_suffix: "-noaudio"
     steps:
       - uses: actions/checkout@v5
 
@@ -54,11 +64,11 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
             ${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
           tags: |
-              type=raw,value=latest,enable={{is_default_branch}}
-              type=semver,pattern={{version}},value=${{ steps.build_info.outputs.red_version }},enable={{is_default_branch}}
-              type=semver,pattern={{major}}.{{minor}},value=${{ steps.build_info.outputs.red_version }},enable={{is_default_branch}}
-              type=semver,pattern={{major}},value=${{ steps.build_info.outputs.red_version }},enable={{is_default_branch}}
-              type=ref,event=pr
+              type=raw,value=latest${{ matrix.variant.tag_suffix }},enable={{is_default_branch}}
+              type=semver,pattern={{version}}${{ matrix.variant.tag_suffix }},value=${{ steps.build_info.outputs.red_version }},enable={{is_default_branch}}
+              type=semver,pattern={{major}}.{{minor}}${{ matrix.variant.tag_suffix }},value=${{ steps.build_info.outputs.red_version }},enable={{is_default_branch}}
+              type=semver,pattern={{major}}${{ matrix.variant.tag_suffix }},value=${{ steps.build_info.outputs.red_version }},enable={{is_default_branch}}
+              type=ref,event=pr,suffix=${{ matrix.variant.tag_suffix }}
 
       - name: Build and push image
         uses: docker/build-push-action@v6
@@ -68,11 +78,12 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           annotations: ${{ steps.meta.outputs.annotations }}
           platforms: linux/amd64,linux/arm64
+          build-args: ${{ matrix.variant.build_args }}
           # Build cache is scoped to branches by default.
           # We use the main branch as a fallback if there's no cache for the existing branch.
           # https://stackoverflow.com/a/77127188/5209106
           cache-from: |
-            type=gha
-            type=gha,scope=main
-          cache-to: type=gha,mode=max
+            type=gha,scope=${{ matrix.variant.name }}
+            type=gha,scope=main-${{ matrix.variant.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.variant.name }}
           provenance: false
