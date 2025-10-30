@@ -10,6 +10,7 @@
   * [Running the bot with `docker compose`](#running-the-bot-with-docker-compose)
   * [Running the bot with `docker run`](#running-the-bot-with-docker-run)
 * [Tags](#tags)
+  * [No Audio](#no-audio)
 * [Environment Variables](#environment-variables)
   * [Additional Options](#additional-options)
 
@@ -63,10 +64,24 @@ To retrieve the invitation URL, run `docker logs RedBot`. If you only started th
 
 ## Tags
 
-| Tag      | Description                                                                                        |
-| -------- | -------------------------------------------------------------------------------------------------- |
-| `latest` | [Latest release](https://github.com/Cog-Creators/Red-DiscordBot/releases/latest) of Red-DiscordBot |
-| `x.x.x`  | Specified version of Red-DiscordBot (e.g. tag `1.2.3` would be Red version `1.2.3`)                |
+| Tag              | Description                                                                                                                            |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `latest`         | [Latest release](https://github.com/Cog-Creators/Red-DiscordBot/releases/latest) of Red-DiscordBot                                     |
+| `latest-noaudio` | [Latest release](https://github.com/Cog-Creators/Red-DiscordBot/releases/latest) of Red-DiscordBot ([no audio cog support](#no-audio)) |
+| `x.x.x`          | Specified version of Red-DiscordBot (e.g. tag `1.2.3` would be Red version `1.2.3`)                                                    |
+| `x.x.x-noaudio`  | Specified version of Red-DiscordBot (e.g. tag `1.2.3` would be Red version `1.2.3`) ([no audio cog support](#no-audio))                |
+
+### No Audio
+
+Images with a `-noaudio` tag suffix exclude dependencies for the [Audio cog](https://docs.discord.red/en/stable/cog_guides/audio.html), which means that it **will not work**.
+
+Dropping the Audio cog's requirements results in a significant reduction in image size (~200MB):
+
+```
+REPOSITORY                        TAG              SIZE
+ghcr.io/rhomelab/red-discordbot   latest           557MB
+ghcr.io/rhomelab/red-discordbot   latest-noaudio   366MB
+```
 
 ## Environment Variables
 
