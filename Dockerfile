@@ -20,11 +20,10 @@ RUN groupadd -r -g $RED_GID ${RED_USER} && \
 # Keep extra apt caches to speed up subsequent builds
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 
-COPY redbot/requirements.txt ${RED_HOME}/
-
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
    --mount=type=cache,target=/var/lib/apt,sharing=locked \
    --mount=type=cache,target=${RED_HOME}/.cache/pip,sharing=locked \
+   --mount=type=bind,source=redbot/requirements.txt,target=${RED_HOME}/requirements.txt \
    apt update && \
    apt --no-install-recommends -y install build-essential git openjdk-11-jre-headless units tini && \
    su $RED_USER -c "python -m pip install --user -r ${RED_HOME}/requirements.txt" && \
