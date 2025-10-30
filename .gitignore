@@ -1,2 +1,4 @@
 /dev
 venv
+compose.yml
+test_data/
