@@ -23,7 +23,7 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloa
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-   --mount=type=cache,target=${RED_HOME}/.cache/pip,sharing=locked \
+   --mount=type=cache,target=${RED_HOME}/.cache/pip,sharing=locked,uid=${RED_UID},gid=${RED_GID} \
    --mount=type=bind,source=redbot/requirements.txt,target=${RED_HOME}/requirements.txt \
    apt update && \
    apt --no-install-recommends -y install build-essential git units tini && \
