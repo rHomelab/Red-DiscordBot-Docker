@@ -75,12 +75,12 @@ To retrieve the invitation URL, run `docker logs RedBot`. If you only started th
 
 Images with a `-noaudio` tag suffix exclude dependencies for the [Audio cog](https://docs.discord.red/en/stable/cog_guides/audio.html), which means that it **will not work**.
 
-Dropping the Audio cog's requirements results in a significant reduction in image size (~200MB):
+Dropping the Audio cog's requirements results in a significant reduction in image size (>200MB, ~33%):
 
 ```
 REPOSITORY                        TAG              SIZE
-ghcr.io/rhomelab/red-discordbot   latest           557MB
-ghcr.io/rhomelab/red-discordbot   latest-noaudio   366MB
+ghcr.io/rhomelab/red-discordbot   latest           633MB
+ghcr.io/rhomelab/red-discordbot   latest-noaudio   423MB
 ```
 
 ## Environment Variables
