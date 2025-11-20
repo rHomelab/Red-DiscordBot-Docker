@@ -30,7 +30,7 @@ jobs:
             build_args: "SKIP_JRE=1"
             tag_suffix: "-noaudio"
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Get Red version and define tags
         id: build_info
