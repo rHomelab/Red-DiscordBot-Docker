@@ -1,5 +1,5 @@
 Red V3
-Current Version: 3.5.22
+Current Version: 3.5.23
 
 usage: redbot <instance_name> [arguments]
 
@@ -50,6 +50,9 @@ options:
                         these cogs exclusively.
   --unload-cogs UNLOAD_COGS [UNLOAD_COGS ...]
                         Force unloading specified cogs.
+  --cog-path COG_PATH [COG_PATH ...]
+                        Add a specific path to the list of cog paths. This can
+                        be used multiple times to add multiple paths.
   --dry-run             Makes Red quit with code 0 just before the login. This
                         is useful for testing the boot process.
   -v, --verbose, --debug
@@ -81,7 +84,7 @@ options:
                         intent. Currently NOT SUPPORTED (and not covered by
                         our version guarantees) as Red is not prepared to work
                         without all intents. Go to https://discordpy.readthedo
-                        cs.io/en/v2.6.3/api.html#discord.Intents to see what
+                        cs.io/en/v2.7.1/api.html#discord.Intents to see what
                         each intent does. This flag can be used multiple times
                         to specify multiple intents.
   --force-rich-logging  Forcefully enables the Rich logging handlers. This is
