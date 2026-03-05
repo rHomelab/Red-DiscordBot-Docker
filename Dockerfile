@@ -1,9 +1,8 @@
-FROM python:3.11-slim-trixie
+FROM python:3.11-slim-trixie AS without_jre
 
 ARG DEBIAN_FRONTEND=noninteractive \
    RED_UID=1024 \
-   RED_GID=1024 \
-   SKIP_JRE
+   RED_GID=1024
 
 ENV PYTHONUNBUFFERED=1 \
    PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -27,7 +26,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
    --mount=type=bind,source=redbot/requirements.txt,target=${RED_HOME}/requirements.txt \
    apt update && \
    apt --no-install-recommends -y install build-essential git units tini && \
-   if [ -z "$SKIP_JRE" ]; then apt --no-install-recommends -y install openjdk-21-jre-headless; fi && \
    su $RED_USER -c "python -m pip install --user -r ${RED_HOME}/requirements.txt" && \
    apt remove -y build-essential && \
    apt autoremove -y
@@ -37,3 +35,9 @@ COPY --chmod=755 redbot/*.sh ${RED_HOME}/
 VOLUME ["${RED_HOME}/data"]
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/redbot/entrypoint.sh"]
+
+FROM without_jre AS with_jre
+
+COPY --from=eclipse-temurin:17-jre /opt/java/openjdk /opt/java/openjdk
+ENV JAVA_HOME=/opt/java/openjdk
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
