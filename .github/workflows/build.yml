@@ -24,10 +24,10 @@ jobs:
       matrix:
         variant:
           - name: "default"
-            build_args: ""
+            target: "with_jre"
             tag_suffix: ""
           - name: "noaudio"
-            build_args: "SKIP_JRE=1"
+            target: "without_jre"
             tag_suffix: "-noaudio"
     steps:
       - uses: actions/checkout@v6
@@ -73,6 +73,7 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v7
         with:
+          target: ${{ matrix.variant.target }}
           push: ${{ inputs.push != 'false' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
