@@ -38,6 +38,6 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/redbot/entrypoint.sh"]
 
 FROM without_jre AS with_jre
 
-COPY --from=eclipse-temurin:17-jre /opt/java/openjdk /opt/java/openjdk
+COPY --from=eclipse-temurin:17.0.18_8-jre /opt/java/openjdk /opt/java/openjdk
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
