@@ -1,5 +1,5 @@
 Red V3
-Current Version: 3.5.23
+Current Version: 3.5.24
 
 usage: redbot <instance_name> [arguments]
 
@@ -58,6 +58,8 @@ options:
   -v, --verbose, --debug
                         Increase the verbosity of the logs, each usage of this
                         flag increases the verbosity level by 1.
+  --no-verbose, --no-debug
+                        Set the verbosity level to 0.
   --dev                 Enables developer mode
   --mentionable         Allows mentioning the bot as an alternative to using
                         the bot prefix
