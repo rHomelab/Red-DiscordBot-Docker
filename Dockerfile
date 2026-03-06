@@ -1,4 +1,4 @@
-FROM python:3.11-slim-trixie AS without_jre
+FROM python:3.14-slim-trixie AS without_jre
 
 ARG DEBIAN_FRONTEND=noninteractive \
    RED_UID=1024 \
