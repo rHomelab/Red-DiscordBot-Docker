@@ -30,7 +30,7 @@ jobs:
             target: "without_jre"
             tag_suffix: "-noaudio"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Get Red version and define tags
         id: build_info
